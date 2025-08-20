@@ -1,12 +1,14 @@
-export function injectLocalBusinessJSONLD() {
-  const NAME = import.meta.env.VITE_SITE_NAME;
-  const TEL = import.meta.env.VITE_PHONE;
-  const EMAIL = import.meta.env.VITE_EMAIL;
-  const CITY = import.meta.env.VITE_CITY;
-  const PROV = import.meta.env.VITE_PROVINCE;
-  const HOURS = (import.meta.env.VITE_HOURS || '').split(';').map((s: string) => s.trim());
-  const AREA = import.meta.env.VITE_SERVICE_AREA;
-  const URL = import.meta.env.VITE_SITE_URL;
+export function injectLocalBusinessJSONLD(
+  env: Record<string, string | undefined> = import.meta.env
+) {
+  const NAME = env.VITE_SITE_NAME;
+  const TEL = env.VITE_PHONE;
+  const EMAIL = env.VITE_EMAIL;
+  const CITY = env.VITE_CITY;
+  const PROV = env.VITE_PROVINCE;
+  const HOURS = (env.VITE_HOURS || '').split(';').map((s: string) => s.trim());
+  const AREA = env.VITE_SERVICE_AREA;
+  const URL = env.VITE_SITE_URL;
 
   const data = {
     '@context': 'https://schema.org',
@@ -24,6 +26,10 @@ export function injectLocalBusinessJSONLD() {
     openingHours: HOURS,
     areaServed: AREA
   };
+
+  if (typeof document === 'undefined') {
+    return data;
+  }
 
   let el = document.getElementById('jsonld-local') as HTMLScriptElement | null;
   if (!el) {
