@@ -1,0 +1,12 @@
+/* Si preferís centralizar estilos de inputs */
+.input {
+  @apply w-full rounded-md border border-steel-300 bg-white/90 px-10 py-2 placeholder:text-steel-400 text-steel-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition;
+}
+
+.field-with-icon {
+  @apply relative;
+}
+
+.field-with-icon .icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-steel-500;
+}

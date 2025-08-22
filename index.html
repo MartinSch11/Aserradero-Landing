@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>%VITE_SITE_NAME%</title>
+
+    <!-- Preload LCP (hero) -->
+    <link rel="preload" as="image" href="/images/hero.avif" imagesrcset="/images/hero.avif 1x" imagesizes="100vw"
+        fetchpriority="high" />
+
+    <!-- Open Graph/Twitter defaults -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- PWA-like color -->
+    <meta name="theme-color" content="#1e7a46" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+</head>
+
+<body class="bg-white text-slate-900 antialiased">
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

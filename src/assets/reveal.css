@@ -1,0 +1,35 @@
+/* Animación base */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 460ms ease,
+    transform 460ms ease;
+  /* Stagger opcional por elemento */
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Variantes opcionales */
+.reveal-x { transform: translateX(16px); }
+.reveal-x.is-visible { transform: translateX(0); }
+
+.reveal-up { transform: translateY(24px); }
+.reveal-up.is-visible { transform: translateY(0); }
+
+/* Respeta usuarios con reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible,
+  .reveal-x,
+  .reveal-up {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

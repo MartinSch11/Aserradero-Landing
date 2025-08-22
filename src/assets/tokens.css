@@ -1,0 +1,17 @@
+/* Jerarquía parecida a SIRO */
+.h1-hero { @apply text-3xl sm:text-4xl md:text-5xl font-extrabold uppercase tracking-tight text-steel-900; }
+.h2-section { @apply text-2xl sm:text-3xl font-extrabold uppercase text-steel-900; }
+.h5-kicker { @apply text-sm font-semibold uppercase text-brand-700; }
+
+.copy-lg { @apply text-lg text-steel-700; }
+.bullet { @apply flex items-start gap-3; }
+.card { @apply rounded-2xl border border-steel-200 bg-white/90 backdrop-blur shadow-[0_1px_2px_rgba(16,24,40,0.06)]; }
+
+/* Botón primario */
+.btn-primary { @apply inline-flex items-center rounded-md bg-brand-600 px-4 py-2 text-white hover:bg-brand-700 transition; }
+
+/* KPIs */
+.kpi-wrap { @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4; }
+.kpi { @apply text-center p-4 rounded-xl border border-steel-200 bg-white/80; }
+.kpi .num { @apply text-3xl md:text-4xl font-extrabold text-steel-900; }
+.kpi .label { @apply mt-1 text-sm font-semibold uppercase text-steel-600; }
