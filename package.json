@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "concurrently -k \"npm:dev:server\" \"vite\"",
     "dev:server": "ts-node-dev --respawn --transpile-only server/contact.ts",
-    "build": "vite build && node scripts/generate-sitemap.mjs",
+    "build": "node scripts/generate-sitemap.mjs && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .ts,.vue",
     "format": "prettier --write .",
