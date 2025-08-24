@@ -9,12 +9,12 @@
 
     <!-- Flechas (fuera del track) -->
     <button class="nav prev" type="button" aria-label="Imagen anterior" @click="prev">
-      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </button>
     <button class="nav next" type="button" aria-label="Imagen siguiente" @click="next">
-      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </button>
@@ -32,7 +32,6 @@ const updateSlideWidth = () => {
   const firstSlide = track.value?.querySelector(".slide") as HTMLElement | null;
   if (firstSlide) {
     slideWidth = firstSlide.offsetWidth;
-    // Re-snap al slide actual tras un resize
     if (track.value) {
       track.value.scrollTo({ left: currentIndex.value * slideWidth });
     }
@@ -51,13 +50,12 @@ const next = () => scrollToIndex(currentIndex.value + 1);
 const prev = () => scrollToIndex(currentIndex.value - 1);
 
 // Solo prevenimos el scroll cuando PODEMOS mover el carrusel.
-// En los bordes, dejamos que la página scrollee.
 const onWheel = (e: WheelEvent) => {
   const el = track.value;
   if (!el) return;
 
   const down = e.deltaY > 0;
-  const EPS = 2; // tolerancia
+  const EPS = 2;
 
   const atStart = el.scrollLeft <= EPS || currentIndex.value === 0;
   const totalSlides = el.querySelectorAll(".slide").length;
@@ -72,10 +70,8 @@ const onWheel = (e: WheelEvent) => {
     e.preventDefault();
     prev();
   }
-  // Si estamos en el borde, NO prevenimos: dejamos pasar el scroll de la página.
 };
 
-// Misma idea para teclado: solo prevenimos cuando el carrusel puede moverse.
 const onKeyDown = (e: KeyboardEvent) => {
   const el = track.value;
   if (!el) return;
@@ -84,16 +80,12 @@ const onKeyDown = (e: KeyboardEvent) => {
   const atStart = currentIndex.value === 0;
   const atEnd = currentIndex.value >= totalSlides - 1;
 
-  if (e.key === "ArrowRight") {
-    if (!atEnd) {
-      e.preventDefault();
-      next();
-    }
-  } else if (e.key === "ArrowLeft") {
-    if (!atStart) {
-      e.preventDefault();
-      prev();
-    }
+  if (e.key === "ArrowRight" && !atEnd) {
+    e.preventDefault();
+    next();
+  } else if (e.key === "ArrowLeft" && !atStart) {
+    e.preventDefault();
+    prev();
   }
 };
 
@@ -125,13 +117,11 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* Wrapper posicionado: referencia para las flechas */
 .carousel-wrap {
   position: relative;
   height: 70vh;
 }
 
-/* Track: el que scrollea */
 .carousel-track {
   position: relative;
   display: flex;
@@ -141,27 +131,16 @@ onBeforeUnmount(() => {
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
-  touch-action: pan-y;
+  touch-action: pan-y; /* en mobile permite scroll vertical de página */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+.carousel-track::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
-.carousel-track::-webkit-scrollbar {
-  width: 0; height: 0; display: none;
-}
+.slide { flex: 0 0 100%; scroll-snap-align: start; }
+.slide img { width: 100%; height: 100%; object-fit: cover; }
 
-.slide {
-  flex: 0 0 100%;
-  scroll-snap-align: start;
-}
-
-.slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Flechas fijas respecto del wrapper */
+/* Flechas visibles también en mobile */
 .nav {
   position: absolute;
   top: 50%;
@@ -169,23 +148,35 @@ onBeforeUnmount(() => {
   z-index: 10;
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  border-radius: 9999px;
   border: none;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.45);
   color: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  transition: background .2s, opacity .2s;
   pointer-events: auto;
 }
-
+.nav svg { width: 22px; height: 22px; }
 .nav:hover { background: rgba(0,0,0,0.7); }
-.nav.prev { left: 16px; }
-.nav.next { right: 16px; }
+.nav.prev { left: max(12px, env(safe-area-inset-left)); }
+.nav.next { right: max(12px, env(safe-area-inset-right)); }
 
+/* Mejoras para pantallas táctiles: botones un poco más grandes y con más opacidad */
 @media (max-width: 640px) {
-  .nav { display: none; }
+  .nav {
+    width: 56px;
+    height: 56px;
+    background: rgba(0,0,0,0.55);
+  }
+  .nav svg { width: 24px; height: 24px; }
+}
+
+/* Opcional: en desktop, que se “insinúen” y aparezcan al pasar el mouse */
+@media (hover: hover) and (pointer: fine) {
+  .nav { opacity: .85; }
+  .carousel-wrap:hover .nav { opacity: 1; }
 }
 </style>
